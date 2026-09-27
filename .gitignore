@@ -1,0 +1,9 @@
+/config/db.php
+/config/storage.php
+/studycircle_private/
+/uploads/
+/backups/
+/.env
+*.log
+/nsbm_studycircle.sql
+/test_db.php
