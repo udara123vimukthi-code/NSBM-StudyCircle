@@ -1,9 +1,7 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
+require_once __DIR__ . '/session.php';
 require_once __DIR__ . '/db.php';
+
 
 function escape($value) {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
