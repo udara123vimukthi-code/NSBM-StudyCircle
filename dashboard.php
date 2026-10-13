@@ -9,7 +9,9 @@ if ($user['role'] === 'admin') {
 
 $stmt = $pdo->prepare(
     "SELECT COUNT(*) AS uploads,
-            COALESCE(SUM(status = 'approved'), 0) AS approved
+            COALESCE(SUM(status = 'approved'), 0) AS approved,
+            COALESCE(SUM(status = 'pending'), 0) AS pending,
+            COALESCE(SUM(status = 'rejected'), 0) AS rejected
      FROM materials WHERE uploaded_by = ?"
 );
 $stmt->execute([$user['id']]);
@@ -104,6 +106,15 @@ $links = [
         <article class="card">
             <h2 class="stat-label">Approved uploads</h2>
             <p class="stat-number"><?= (int) $materialStats['approved'] ?></p>
+        </article>
+        <article class="card">
+            <h2 class="stat-label">Pending uploads</h2>
+            <p class="stat-number"><?= (int) $materialStats['pending'] ?></p>
+        </article>
+
+        <article class="card">
+            <h2 class="stat-label">Rejected uploads</h2>
+            <p class="stat-number"><?= (int) $materialStats['rejected'] ?></p>
         </article>
         <article class="card">
             <h2 class="stat-label">My groups</h2>
