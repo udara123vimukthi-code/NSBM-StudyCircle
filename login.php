@@ -150,7 +150,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <label for="password">Password</label>
         <input type="password" id="password" name="password"
-               maxlength="72" autocomplete="current-password" required>
+            maxlength="72" autocomplete="current-password" required>
+
+        <button type="button"
+                onclick="togglePassword('password', this)"
+                aria-controls="password"
+                aria-pressed="false">
+            Show password
+        </button>
 
         <button type="submit">Sign in</button>
     </form>
@@ -161,5 +168,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </p>
     <p class="links"><a href="index.php">Back to homepage</a></p>
 </main>
+<script>
+function togglePassword(inputId, button) {
+    var input = document.getElementById(inputId);
+
+    if (input.type === "password") {
+        input.type = "text";
+        button.textContent = "Hide password";
+        button.setAttribute("aria-pressed", "true");
+    } else {
+        input.type = "password";
+        button.textContent = "Show password";
+        button.setAttribute("aria-pressed", "false");
+    }
+}
+</script>
+
 </body>
 </html>

@@ -238,9 +238,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <label for="password">Password</label>
         <input type="password" id="password" name="password"
-               minlength="8" maxlength="72"
-               autocomplete="new-password"
-               aria-describedby="password_hint" required>
+            minlength="8" maxlength="72"
+            autocomplete="new-password"
+            aria-describedby="password_hint" required>
+
+        <button type="button"
+                onclick="togglePassword('password', this)"
+                aria-controls="password"
+                aria-pressed="false">
+            Show password
+        </button>>
+
         <p class="hint" id="password_hint">
             Use at least 8 characters. A longer, unique password is better.
             Maximum: 72 bytes.
@@ -248,14 +256,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <label for="confirm_password">Confirm password</label>
         <input type="password" id="confirm_password"
-               name="confirm_password"
-               minlength="8" maxlength="72"
-               autocomplete="new-password" required>
+                name="confirm_password"
+                minlength="8" maxlength="72"
+                autocomplete="new-password" required>
+
+        <button type="button"
+                onclick="togglePassword('confirm_password', this)"
+                aria-controls="confirm_password"
+                aria-pressed="false">
+            Show password
+        </button>
 
         <button type="submit">Create student account</button>
     </form>
 
     <a class="back" href="index.php">Back to homepage</a>
 </main>
+<script>
+function togglePassword(inputId, button) {
+    var input = document.getElementById(inputId);
+
+    if (input.type === "password") {
+        input.type = "text";
+        button.textContent = "Hide password";
+        button.setAttribute("aria-pressed", "true");
+    } else {
+        input.type = "password";
+        button.textContent = "Show password";
+        button.setAttribute("aria-pressed", "false");
+    }
+}
+</script>
+
 </body>
 </html>
