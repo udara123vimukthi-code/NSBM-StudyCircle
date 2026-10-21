@@ -84,29 +84,66 @@ $resources = $pdo->query(
      LIMIT 10"
 )->fetchAll();
 
-$subjectUsage = $pdo->query(
-    "SELECT s.subject_code, s.subject_name,
-            COALESCE(m.total, 0) AS total,
-            COALESCE(m.approved, 0) AS approved,
-            COALESCE(d.downloads, 0) AS downloads
-     FROM subjects s
-
-     LEFT JOIN (
-         SELECT subject_id, COUNT(*) AS total,
-                SUM(status = 'approved') AS approved
-         FROM materials
-         GROUP BY subject_id
-     ) m ON m.subject_id = s.id
-
-     LEFT JOIN (
-         SELECT m.subject_id, COUNT(*) AS downloads
-         FROM material_downloads d
-         JOIN materials m ON m.id = d.material_id
-         GROUP BY m.subject_id
-     ) d ON d.subject_id = s.id
-
-     ORDER BY downloads DESC, s.subject_code"
+$reportSubjects = $pdo->query(
+    'SELECT id, subject_code, subject_name
+     FROM subjects ORDER BY subject_code'
 )->fetchAll();
+
+$reportSubjectId = filter_var(
+    $_GET['subject_id'] ?? '0',
+    FILTER_VALIDATE_INT,
+    ['options' => ['min_range' => 0]]
+) ?: 0;
+
+$selectedSubjectLabel = 'All subjects';
+$validSubject = false;
+
+foreach ($reportSubjects as $subject) {
+    if ((int) $subject['id'] === $reportSubjectId) {
+        $validSubject = true;
+        $selectedSubjectLabel =
+            $subject['subject_code'] . ' - ' .
+            $subject['subject_name'];
+        break;
+    }
+}
+
+if (!$validSubject) {
+    $reportSubjectId = 0;
+}
+
+$sql = "SELECT s.subject_code, s.subject_name,
+               COALESCE(m.total, 0) AS total,
+               COALESCE(m.approved, 0) AS approved,
+               COALESCE(d.downloads, 0) AS downloads
+        FROM subjects s
+
+        LEFT JOIN (
+            SELECT subject_id, COUNT(*) AS total,
+                   SUM(status = 'approved') AS approved
+            FROM materials
+            GROUP BY subject_id
+        ) m ON m.subject_id = s.id
+
+        LEFT JOIN (
+            SELECT m.subject_id, COUNT(*) AS downloads
+            FROM material_downloads d
+            JOIN materials m ON m.id = d.material_id
+            GROUP BY m.subject_id
+        ) d ON d.subject_id = s.id";
+
+$params = [];
+
+if ($reportSubjectId > 0) {
+    $sql .= ' WHERE s.id = ?';
+    $params[] = $reportSubjectId;
+}
+
+$sql .= ' ORDER BY downloads DESC, s.subject_code';
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
+$subjectUsage = $stmt->fetchAll();
 
 $generatedAt = new DateTimeImmutable(
     'now',
@@ -246,7 +283,7 @@ $generatedAt = new DateTimeImmutable(
             Print / Save PDF
         </button>
     </div>
-
+    <h2>Overall community statistics</h2>
     <section class="stats" aria-label="Main statistics">
         <article class="stat">
             <h2>Students</h2>
@@ -381,6 +418,37 @@ $generatedAt = new DateTimeImmutable(
 
     <section class="card">
         <h2>Usage by subject</h2>
+        <form method="get" action="admin_reports.php" class="no-print">
+    <label for="report_subject">Choose a subject:</label>
+
+    <select id="report_subject" name="subject_id">
+        <option value="0">All subjects</option>
+
+        <?php foreach ($reportSubjects as $subject): ?>
+            <option value="<?= (int) $subject['id'] ?>"
+                <?= $reportSubjectId === (int) $subject['id']
+                    ? 'selected' : '' ?>>
+                <?= escape(
+                    $subject['subject_code'] . ' - ' .
+                    $subject['subject_name']
+                ) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+
+    <button type="submit">Apply filter</button>
+    <a href="admin_reports.php">Clear filter</a>
+</form>
+
+<p>
+    <strong>Selected subject:</strong>
+    <?= escape($selectedSubjectLabel) ?>
+</p>
+
+<p class="muted">
+    This filter applies only to the Usage by subject section.
+    All other report sections show overall activity.
+</p>
         <?php if (!$subjectUsage): ?>
             <p>No subjects available yet.</p>
         <?php else: ?>
