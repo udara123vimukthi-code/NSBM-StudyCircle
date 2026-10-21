@@ -52,21 +52,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$materials = $pdo->query(
-    "SELECT m.id, m.title, m.description, m.original_name,
-            m.file_size, m.status, m.created_at,
-            u.full_name AS uploader_name,
-            s.subject_code, s.subject_name,
-            c.name AS category_name
-     FROM materials m
-     JOIN users u ON u.id = m.uploaded_by
-     JOIN subjects s ON s.id = m.subject_id
-     JOIN categories c ON c.id = m.category_id
-     ORDER BY
-        CASE WHEN m.status = 'pending' THEN 0 ELSE 1 END,
-        m.created_at DESC,
-        m.id DESC"
-)->fetchAll();
+$search = isset($_GET['q']) && is_string($_GET['q'])
+    ? trim($_GET['q'])
+    : '';
+
+$search = mb_substr($search, 0, 150);
+
+$statusFilter = isset($_GET['status']) && is_string($_GET['status'])
+    ? $_GET['status']
+    : '';
+
+$allowedStatuses = ['pending', 'approved', 'rejected'];
+
+if (!in_array($statusFilter, $allowedStatuses, true)) {
+    $statusFilter = '';
+}
+
+$sql = "SELECT m.id, m.title, m.description, m.original_name,
+               m.file_size, m.status, m.created_at,
+               u.full_name AS uploader_name,
+               s.subject_code, s.subject_name,
+               c.name AS category_name
+        FROM materials m
+        JOIN users u ON u.id = m.uploaded_by
+        JOIN subjects s ON s.id = m.subject_id
+        JOIN categories c ON c.id = m.category_id
+        WHERE 1 = 1";
+
+$params = [];
+
+if ($search !== '') {
+    $term = '%' . str_replace(
+        ['!', '%', '_'],
+        ['!!', '!%', '!_'],
+        $search
+    ) . '%';
+
+    $sql .= " AND m.title LIKE ? ESCAPE '!'";
+    $params[] = $term;
+}
+
+if ($statusFilter !== '') {
+    $sql .= ' AND m.status = ?';
+    $params[] = $statusFilter;
+}
+
+$sql .= " ORDER BY
+            CASE WHEN m.status = 'pending' THEN 0 ELSE 1 END,
+            m.created_at DESC,
+            m.id DESC";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
+$materials = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -177,6 +215,40 @@ $materials = $pdo->query(
 </header>
 
 <main>
+    <form method="get" action="admin_materials.php" class="card">
+    <h2>Find materials</h2>
+
+    <label for="material_search">Search by title</label>
+    <input type="search"
+           id="material_search"
+           name="q"
+           value="<?= escape($search) ?>"
+           maxlength="150"
+           placeholder="Enter a material title">
+
+    <label for="status_filter">Material status</label>
+    <select id="status_filter" name="status">
+        <option value="">All statuses</option>
+
+        <option value="pending"
+            <?= $statusFilter === 'pending' ? 'selected' : '' ?>>
+            Pending
+        </option>
+
+        <option value="approved"
+            <?= $statusFilter === 'approved' ? 'selected' : '' ?>>
+            Approved
+        </option>
+
+        <option value="rejected"
+            <?= $statusFilter === 'rejected' ? 'selected' : '' ?>>
+            Rejected
+        </option>
+    </select>
+
+    <button type="submit">Search materials</button>
+    <a href="admin_materials.php">Clear filters</a>
+</form>
     <a href="admin_dashboard.php">&larr; Back to dashboard</a>
     <h1>Review study materials</h1>
     <p>Download each submission to review it before approving.
