@@ -78,7 +78,21 @@ if ($categoryId > 0) {
     $params[] = $categoryId;
 }
 
-$sql .= ' ORDER BY m.created_at DESC, m.id DESC';
+$sort = isset($_GET['sort']) && is_string($_GET['sort'])
+    ? $_GET['sort']
+    : 'newest';
+
+$sortOptions = [
+    'newest' => 'm.created_at DESC, m.id DESC',
+    'oldest' => 'm.created_at ASC, m.id ASC',
+    'title' => 'm.title ASC, m.id ASC'
+];
+
+if (!isset($sortOptions[$sort])) {
+    $sort = 'newest';
+}
+
+$sql .= ' ORDER BY ' . $sortOptions[$sort];
 
 $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
@@ -313,6 +327,26 @@ $materials = $stmt->fetchAll();
             </div>
         </div>
 
+        <div>
+            <label for="sort">Sort materials</label>
+
+            <select id="sort" name="sort">
+                <option value="newest"
+                    <?= $sort === 'newest' ? 'selected' : '' ?>>
+                    Newest first
+                </option>
+
+                <option value="oldest"
+                    <?= $sort === 'oldest' ? 'selected' : '' ?>>
+                    Oldest first
+                </option>
+
+                <option value="title"
+                    <?= $sort === 'title' ? 'selected' : '' ?>>
+                    Title A–Z
+                </option>
+            </select>
+        </div>
         <div class="actions">
             <button type="submit">Search materials</button>
             <a href="materials.php">Clear filters</a>
