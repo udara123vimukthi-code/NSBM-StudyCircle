@@ -170,14 +170,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['edit'])) {
     $subjectId = (int) $question['subject_id'];
 }
 
-$questions = $pdo->query(
-    'SELECT q.id, q.user_id, q.title, q.body, q.created_at,
-            u.full_name, s.subject_code, s.subject_name
-     FROM forum_questions q
-     JOIN users u ON u.id = q.user_id
-     JOIN subjects s ON s.id = q.subject_id
-     ORDER BY q.created_at DESC, q.id DESC'
-)->fetchAll();
+$search = isset($_GET['q']) && is_string($_GET['q'])
+    ? trim($_GET['q'])
+    : '';
+
+$search = mb_substr($search, 0, 150);
+
+$filterSubjectId = filter_var(
+    $_GET['filter_subject'] ?? '0',
+    FILTER_VALIDATE_INT,
+    ['options' => ['min_range' => 0]]
+) ?: 0;
+
+$sql = 'SELECT q.id, q.user_id, q.title, q.body, q.created_at,
+               u.full_name, s.subject_code, s.subject_name
+        FROM forum_questions q
+        JOIN users u ON u.id = q.user_id
+        JOIN subjects s ON s.id = q.subject_id
+        WHERE 1 = 1';
+
+$params = [];
+
+if ($search !== '') {
+    $term = '%' . str_replace(
+        ['!', '%', '_'],
+        ['!!', '!%', '!_'],
+        $search
+    ) . '%';
+
+    $sql .= " AND (
+        q.title LIKE ? ESCAPE '!'
+        OR q.body LIKE ? ESCAPE '!'
+    )";
+
+    $params[] = $term;
+    $params[] = $term;
+}
+
+if ($filterSubjectId > 0) {
+    $sql .= ' AND q.subject_id = ?';
+    $params[] = $filterSubjectId;
+}
+
+$sql .= ' ORDER BY q.created_at DESC, q.id DESC';
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
+$questions = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -289,6 +328,36 @@ $questions = $pdo->query(
 </header>
 
 <main>
+    <form method="get" action="forum.php" class="card">
+        <h2>Find questions</h2>
+
+        <label for="forum_search">Search questions</label>
+        <input type="search"
+            id="forum_search"
+            name="q"
+            value="<?= escape($search) ?>"
+            maxlength="150"
+            placeholder="Enter a keyword">
+
+        <label for="filter_subject">Subject</label>
+        <select id="filter_subject" name="filter_subject">
+            <option value="0">All subjects</option>
+
+            <?php foreach ($subjects as $subject): ?>
+                <option value="<?= (int) $subject['id'] ?>"
+                   <?= $filterSubjectId === (int) $subject['id']
+                    ? 'selected' : '' ?>>
+                  <?= escape(
+                        $subject['subject_code'] . ' - ' .
+                        $subject['subject_name']
+                  ) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+
+        <button type="submit">Search questions</button>
+        <a href="forum.php">Clear filters</a>
+    </form>
     <a href="<?= escape($dashboard) ?>">&larr; Back to dashboard</a>
 
     <section class="hero">
