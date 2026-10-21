@@ -196,17 +196,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['edit'])) {
     }
 }
 
-$stmt = $pdo->prepare(
-    'SELECT m.id, m.title, m.status, m.original_name,
-            m.created_at, s.subject_code,
-            c.name AS category_name
-     FROM materials m
-     JOIN subjects s ON s.id = m.subject_id
-     JOIN categories c ON c.id = m.category_id
-     WHERE m.uploaded_by = ?
-     ORDER BY m.created_at DESC, m.id DESC'
-);
-$stmt->execute([$user['id']]);
+$statusFilter = isset($_GET['status']) && is_string($_GET['status'])
+    ? $_GET['status']
+    : '';
+
+$allowedStatuses = ['pending', 'approved', 'rejected'];
+
+if (!in_array($statusFilter, $allowedStatuses, true)) {
+    $statusFilter = '';
+}
+
+$sql = 'SELECT m.id, m.title, m.status, m.original_name,
+               m.created_at, s.subject_code,
+               c.name AS category_name
+        FROM materials m
+        JOIN subjects s ON s.id = m.subject_id
+        JOIN categories c ON c.id = m.category_id
+        WHERE m.uploaded_by = ?';
+
+$params = [$user['id']];
+
+if ($statusFilter !== '') {
+    $sql .= ' AND m.status = ?';
+    $params[] = $statusFilter;
+}
+
+$sql .= ' ORDER BY m.created_at DESC, m.id DESC';
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
 $materials = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
@@ -313,6 +331,31 @@ $materials = $stmt->fetchAll();
 </header>
 
 <main>
+    <form method="get" action="my_uploads.php">
+    <label for="status_filter">Filter uploads by status:</label>
+
+    <select id="status_filter" name="status">
+        <option value="">All uploads</option>
+
+        <option value="pending"
+            <?= $statusFilter === 'pending' ? 'selected' : '' ?>>
+            Pending
+        </option>
+
+        <option value="approved"
+            <?= $statusFilter === 'approved' ? 'selected' : '' ?>>
+            Approved
+        </option>
+
+        <option value="rejected"
+            <?= $statusFilter === 'rejected' ? 'selected' : '' ?>>
+            Rejected
+        </option>
+    </select>
+
+    <button type="submit">Apply filter</button>
+    <a href="my_uploads.php">Clear filter</a>
+</form>
     <a href="dashboard.php">&larr; Back to dashboard</a>
     <h1>My uploads</h1>
     <p>Track your submissions and keep your materials up to date.</p>
