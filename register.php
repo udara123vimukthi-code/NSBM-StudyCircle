@@ -247,7 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 aria-controls="password"
                 aria-pressed="false">
             Show password
-        </button>>
+        </button>
 
         <p class="hint" id="password_hint">
             Use at least 8 characters. A longer, unique password is better.
