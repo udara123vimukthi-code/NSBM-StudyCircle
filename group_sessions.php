@@ -252,16 +252,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['edit'])) {
     ))->format('Y-m-d\TH:i');
 }
 
-$stmt = $pdo->prepare(
-    'SELECT s.*, u.full_name AS creator_name
-     FROM study_sessions s
-     JOIN users u ON u.id = s.created_by
-     WHERE s.group_id = ?
-     ORDER BY s.starts_at ASC, s.id ASC'
-);
-$stmt->execute([$groupId]);
-$sessions = $stmt->fetchAll();
+$sessionFilter = isset($_GET['filter']) && is_string($_GET['filter'])
+    ? $_GET['filter']
+    : 'all';
+
+$allowedFilters = ['all', 'upcoming', 'ongoing', 'past'];
+
+if (!in_array($sessionFilter, $allowedFilters, true)) {
+    $sessionFilter = 'all';
+}
+
 $now = new DateTimeImmutable('now', $timezone);
+$currentTime = $now->format('Y-m-d H:i:s');
+
+$sql = 'SELECT s.*, u.full_name AS creator_name
+        FROM study_sessions s
+        JOIN users u ON u.id = s.created_by
+        WHERE s.group_id = ?';
+
+$params = [$groupId];
+
+if ($sessionFilter === 'upcoming') {
+    $sql .= ' AND s.starts_at > ?';
+    $params[] = $currentTime;
+} elseif ($sessionFilter === 'ongoing') {
+    $sql .= ' AND s.starts_at <= ? AND s.ends_at > ?';
+    $params[] = $currentTime;
+    $params[] = $currentTime;
+} elseif ($sessionFilter === 'past') {
+    $sql .= ' AND s.ends_at <= ?';
+    $params[] = $currentTime;
+}
+
+$sql .= ' ORDER BY s.starts_at ASC, s.id ASC';
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
+$sessions = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -365,6 +392,42 @@ $now = new DateTimeImmutable('now', $timezone);
 </header>
 
 <main>
+    <form method="get" action="group_sessions.php" class="card">
+        <input type="hidden"
+            name="group_id"
+            value="<?= (int) $groupId ?>">
+
+        <label for="session_filter">Filter study sessions</label>
+
+        <select id="session_filter" name="filter">
+            <option value="all"
+                <?= $sessionFilter === 'all' ? 'selected' : '' ?>>
+                All sessions
+            </option>
+
+            <option value="upcoming"
+                <?= $sessionFilter === 'upcoming' ? 'selected' : '' ?>>
+                Upcoming
+            </option>
+
+            <option value="ongoing"
+                <?= $sessionFilter === 'ongoing' ? 'selected' : '' ?>>
+                Ongoing
+            </option>
+
+            <option value="past"
+                <?= $sessionFilter === 'past' ? 'selected' : '' ?>>
+                Past
+            </option>
+        </select>
+
+        <button type="submit">Apply filter</button>
+
+        <a href="group_sessions.php?group_id=<?= (int) $groupId ?>">
+            Clear filter
+        </a>
+    </form>
+
     <a href="groups.php">&larr; Back to study groups</a>
     <h1><?= escape($group['name']) ?></h1>
     <p>Study sessions · All times are in Sri Lanka time (UTC+05:30).</p>
