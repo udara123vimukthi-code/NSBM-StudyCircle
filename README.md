@@ -196,3 +196,9 @@ The final submission will include:
 - A project report
 - A demonstration video
 - Team member names, roles, and contributions
+
+- ## Live Website
+
+[Visit NSBM StudyCircle](https://nsbm-studycircle.freedev.app/index.php)
+
+Create a student account to explore the website.
