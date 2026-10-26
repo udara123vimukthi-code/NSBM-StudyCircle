@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
-            header('Location: register.php');
+            header('Location: login.php', true, 303);
             exit;
         } catch (PDOException $e) {
             if ((int) ($e->errorInfo[1] ?? 0) === 1062) {
