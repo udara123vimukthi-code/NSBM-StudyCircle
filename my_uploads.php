@@ -237,16 +237,16 @@ $materials = $stmt->fetchAll();
         * { box-sizing: border-box; }
         body {
             margin: 0;
-            background: #eff8f2;
-            color: #173e2c;
+            background: var(--sc-bg);
+            color: var(--sc-text);
             font-family: Arial, sans-serif;
         }
         header {
             padding: 20px 6%;
-            background: white;
+            background: var(--sc-surface);
             border-bottom: 1px solid #dce9df;
         }
-        a { color: #146b3d; }
+        a { color: var(--sc-accent); }
         .logo {
             font-size: 22px;
             font-weight: bold;
@@ -261,7 +261,7 @@ $materials = $stmt->fetchAll();
         .card {
             margin-top: 24px;
             padding: 26px;
-            background: white;
+            background: var(--sc-surface);
             border: 1px solid #dce9df;
             border-radius: 16px;
             overflow-wrap: anywhere;
@@ -280,10 +280,10 @@ $materials = $stmt->fetchAll();
             font-size: 13px;
             font-weight: bold;
         }
-        .pending { background: #fff3cd; color: #755400; }
-        .approved { background: #dff3e6; color: #145c33; }
-        .rejected { background: #fff0f0; color: #952525; }
-        .details { color: #52685b; }
+        .pending { background: var(--sc-warning-bg); color: var(--sc-warning-text); }
+        .approved { background: var(--sc-success-bg); color: var(--sc-success-text); }
+        .rejected { background: var(--sc-error-bg); color: var(--sc-error-text); }
+        .details { color: var(--sc-muted); }
         label {
             display: block;
             margin: 18px 0 8px;
@@ -292,8 +292,8 @@ $materials = $stmt->fetchAll();
         input, select, textarea {
             width: 100%;
             padding: 12px;
-            background: white;
-            color: #173e2c;
+            background: var(--sc-surface);
+            color: var(--sc-text);
             border: 1px solid #b6cabb;
             border-radius: 8px;
             font: inherit;
@@ -301,33 +301,36 @@ $materials = $stmt->fetchAll();
         textarea { min-height: 130px; resize: vertical; }
         input:focus, select:focus, textarea:focus {
             outline: 3px solid #d1efdc;
-            border-color: #16834a;
+            border-color: var(--sc-accent);
         }
         button {
             padding: 11px 16px;
-            background: #16834a;
+            background: var(--sc-button);
             color: white;
             border: 0;
             border-radius: 8px;
             font: inherit;
             cursor: pointer;
         }
-        button:hover { background: #106337; }
-        .delete { background: #fff0f0; color: #952525; }
-        .delete:hover { background: #fbdede; }
+        button:hover { background: var(--sc-button-hover); }
+        .delete { background: var(--sc-error-bg); color: var(--sc-error-text); }
+        .delete:hover { background: var(--sc-error-bg); }
         .form-actions { margin-top: 22px; }
         .message {
             padding: 15px;
             border-radius: 10px;
             line-height: 1.6;
         }
-        .success { background: #dff3e6; color: #145c33; }
-        .error { background: #fff0f0; color: #952525; }
+        .success { background: var(--sc-success-bg); color: var(--sc-success-text); }
+        .error { background: var(--sc-error-bg); color: var(--sc-error-text); }
     </style>
+    <link rel="stylesheet" href="theme.css?v=1">
+    <script src="theme.js?v=1"></script>
 </head>
 <body>
 <header>
     <a class="logo" href="dashboard.php">NSBM StudyCircle</a>
+<button type="button" class="theme-toggle" aria-label="Switch to dark theme" aria-pressed="false" hidden>Dark mode</button>
 </header>
 
 <main>

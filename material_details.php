@@ -179,15 +179,15 @@ $comments = $stmt->fetchAll();
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: #eff8f2;
-            color: #173e2c;
+            background: var(--sc-bg);
+            color: var(--sc-text);
         }
         header {
             padding: 20px 6%;
-            background: white;
+            background: var(--sc-surface);
             border-bottom: 1px solid #dce9df;
         }
-        a { color: #146b3d; }
+        a { color: var(--sc-accent); }
         .logo {
             font-size: 22px;
             font-weight: bold;
@@ -201,13 +201,13 @@ $comments = $stmt->fetchAll();
         .card {
             margin-top: 24px;
             padding: 26px;
-            background: white;
+            background: var(--sc-surface);
             border: 1px solid #dce9df;
             border-radius: 16px;
             overflow-wrap: anywhere;
         }
         p { line-height: 1.7; }
-        .muted { color: #52685b; }
+        .muted { color: var(--sc-muted); }
         label {
             display: block;
             margin: 16px 0 8px;
@@ -218,19 +218,19 @@ $comments = $stmt->fetchAll();
             padding: 12px;
             border: 1px solid #b6cabb;
             border-radius: 8px;
-            background: white;
-            color: #173e2c;
+            background: var(--sc-surface);
+            color: var(--sc-text);
             font: inherit;
         }
         textarea { min-height: 120px; resize: vertical; }
         select:focus, textarea:focus {
             outline: 3px solid #d1efdc;
-            border-color: #16834a;
+            border-color: var(--sc-accent);
         }
         button, .download {
             display: inline-block;
             padding: 11px 16px;
-            background: #16834a;
+            background: var(--sc-button);
             color: white;
             border: 0;
             border-radius: 8px;
@@ -238,10 +238,10 @@ $comments = $stmt->fetchAll();
             text-decoration: none;
             cursor: pointer;
         }
-        button:hover, .download:hover { background: #106337; }
+        button:hover, .download:hover { background: var(--sc-button-hover); }
         .spaced { margin-top: 16px; }
-        .delete { background: #fff0f0; color: #952525; }
-        .delete:hover { background: #fbdede; }
+        .delete { background: var(--sc-error-bg); color: var(--sc-error-text); }
+        .delete:hover { background: var(--sc-error-bg); }
         .comment {
             padding: 20px 0;
             border-top: 1px solid #e2ece5;
@@ -251,13 +251,16 @@ $comments = $stmt->fetchAll();
             padding: 15px;
             border-radius: 10px;
         }
-        .success { background: #dff3e6; color: #145c33; }
-        .error { background: #fff0f0; color: #952525; }
+        .success { background: var(--sc-success-bg); color: var(--sc-success-text); }
+        .error { background: var(--sc-error-bg); color: var(--sc-error-text); }
     </style>
+    <link rel="stylesheet" href="theme.css?v=1">
+    <script src="theme.js?v=1"></script>
 </head>
 <body>
 <header>
     <a class="logo" href="materials.php">NSBM StudyCircle</a>
+<button type="button" class="theme-toggle" aria-label="Switch to dark theme" aria-pressed="false" hidden>Dark mode</button>
 </header>
 
 <main>

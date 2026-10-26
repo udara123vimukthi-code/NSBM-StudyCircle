@@ -63,6 +63,8 @@ $links = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard | NSBM StudyCircle</title>
     <link rel="stylesheet" href="site.css">
+    <link rel="stylesheet" href="theme.css?v=1">
+    <script src="theme.js?v=1"></script>
 </head>
 <body>
 <header class="site-header">
@@ -76,6 +78,7 @@ $links = [
         </a>
 
         <nav aria-label="Student navigation">
+            <button type="button" class="theme-toggle" aria-label="Switch to dark theme" aria-pressed="false" hidden>Dark mode</button>
             <a href="index.php">Home</a>
             <a href="materials.php">Materials</a>
             <a href="forum.php">Forum</a>
@@ -96,6 +99,7 @@ $links = [
         <p class="eyebrow">NSBM Green University</p>
         <h1>Welcome, <?= escape($user['full_name']) ?>!</h1>
         <p>Pick up a new idea, share what you know, or plan your next study session.</p>
+    <div class="actions dashboard-actions"><a class="button button-outline" href="materials.php">Browse materials &rarr;</a><a class="button button-outline" href="upload_material.php">Share notes &rarr;</a><a class="button button-outline" href="groups.php">Find a study group &rarr;</a></div>
     </section>
 
     <section class="stats" aria-label="Your activity">

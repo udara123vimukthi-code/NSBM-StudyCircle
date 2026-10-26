@@ -104,21 +104,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         body {
             margin: 0;
             padding: 32px 16px;
-            background: #eff8f2;
-            color: #173e2c;
+            background: var(--sc-bg);
+            color: var(--sc-text);
             font-family: Arial, sans-serif;
         }
         main {
             max-width: 520px;
             margin: 0 auto;
             padding: 36px;
-            background: #fff;
-            border-top: 6px solid #16834a;
+            background: var(--sc-surface);
+            border-top: 6px solid var(--sc-button);
             border-radius: 20px;
             box-shadow: 0 16px 48px #153d2a12;
         }
         .brand {
-            color: #16834a;
+            color: var(--sc-accent);
             font-size: 12px;
             font-weight: bold;
             letter-spacing: 2px;
@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 32px;
         }
         .intro {
-            color: #5a6f62;
+            color: var(--sc-muted);
             line-height: 1.6;
             margin-bottom: 28px;
         }
@@ -147,10 +147,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         input:focus {
             outline: 3px solid #d1efdc;
-            border-color: #16834a;
+            border-color: var(--sc-accent);
         }
         .hint {
-            color: #5a6f62;
+            color: var(--sc-muted);
             font-size: 12px;
             line-height: 1.5;
         }
@@ -158,7 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             width: 100%;
             margin-top: 24px;
             padding: 14px;
-            background: #16834a;
+            background: var(--sc-button);
             color: white;
             border: 0;
             border-radius: 9px;
@@ -166,9 +166,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-weight: bold;
             cursor: pointer;
         }
-        button:hover { background: #106337; }
+        button:hover { background: var(--sc-button-hover); }
         button:focus-visible, a:focus-visible {
-            outline: 3px solid #16834a;
+            outline: 3px solid var(--sc-button);
             outline-offset: 4px;
         }
         .message {
@@ -177,23 +177,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             line-height: 1.6;
             overflow-wrap: anywhere;
         }
-        .success { background: #e4f6eb; color: #145c33; }
-        .error { background: #fff0f0; color: #952525; }
+        .success { background: var(--sc-success-bg); color: var(--sc-success-text); }
+        .error { background: var(--sc-error-bg); color: var(--sc-error-text); }
         .error ul { margin: 0; padding-left: 20px; }
         .back {
             display: block;
             margin-top: 24px;
             text-align: center;
-            color: #146b3d;
+            color: var(--sc-accent);
         }
         @media (max-width: 480px) {
             main { padding: 26px 20px; }
             h1 { font-size: 28px; }
         }
     </style>
+    <link rel="stylesheet" href="theme.css?v=1">
+    <script src="theme.js?v=1"></script>
 </head>
 <body>
 <main>
+    <div class="theme-toolbar"><button type="button" class="theme-toggle" aria-label="Switch to dark theme" aria-pressed="false" hidden>Dark mode</button></div>
     <p class="brand">NSBM GREEN UNIVERSITY</p>
     <h1>Join StudyCircle</h1>
     <p class="intro">

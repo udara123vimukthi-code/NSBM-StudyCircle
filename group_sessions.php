@@ -301,15 +301,15 @@ $sessions = $stmt->fetchAll();
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: #eff8f2;
-            color: #173e2c;
+            background: var(--sc-bg);
+            color: var(--sc-text);
         }
         header {
             padding: 20px 6%;
-            background: white;
+            background: var(--sc-surface);
             border-bottom: 1px solid #dce9df;
         }
-        a { color: #146b3d; }
+        a { color: var(--sc-accent); }
         .logo {
             font-size: 22px;
             font-weight: bold;
@@ -325,7 +325,7 @@ $sessions = $stmt->fetchAll();
         .card {
             margin-top: 24px;
             padding: 26px;
-            background: white;
+            background: var(--sc-surface);
             border: 1px solid #dce9df;
             border-radius: 16px;
             overflow-wrap: anywhere;
@@ -345,7 +345,7 @@ $sessions = $stmt->fetchAll();
         }
         input:focus {
             outline: 3px solid #d1efdc;
-            border-color: #16834a;
+            border-color: var(--sc-accent);
         }
         .time-grid {
             display: grid;
@@ -361,34 +361,37 @@ $sessions = $stmt->fetchAll();
         }
         button {
             padding: 11px 16px;
-            background: #16834a;
+            background: var(--sc-button);
             color: white;
             border: 0;
             border-radius: 8px;
             font: inherit;
             cursor: pointer;
         }
-        button:hover { background: #106337; }
-        .delete { background: #fff0f0; color: #952525; }
-        .delete:hover { background: #fbdede; }
+        button:hover { background: var(--sc-button-hover); }
+        .delete { background: var(--sc-error-bg); color: var(--sc-error-text); }
+        .delete:hover { background: var(--sc-error-bg); }
         .badge {
             padding: 6px 10px;
             border-radius: 20px;
-            background: #e7f7ec;
-            color: #146b3d;
+            background: var(--sc-soft);
+            color: var(--sc-accent);
             font-size: 13px;
         }
         .message { padding: 15px; border-radius: 10px; }
-        .success { background: #dff3e6; color: #145c33; }
-        .error { background: #fff0f0; color: #952525; }
+        .success { background: var(--sc-success-bg); color: var(--sc-success-text); }
+        .error { background: var(--sc-error-bg); color: var(--sc-error-text); }
         @media (max-width: 600px) {
             .time-grid { grid-template-columns: 1fr; }
         }
     </style>
+    <link rel="stylesheet" href="theme.css?v=1">
+    <script src="theme.js?v=1"></script>
 </head>
 <body>
 <header>
     <a class="logo" href="groups.php">NSBM StudyCircle</a>
+<button type="button" class="theme-toggle" aria-label="Switch to dark theme" aria-pressed="false" hidden>Dark mode</button>
 </header>
 
 <main>

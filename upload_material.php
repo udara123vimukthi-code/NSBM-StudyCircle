@@ -186,16 +186,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         * { box-sizing: border-box; }
         body {
             margin: 0;
-            background: #eff8f2;
-            color: #173e2c;
+            background: var(--sc-bg);
+            color: var(--sc-text);
             font-family: Arial, sans-serif;
         }
         header {
             padding: 20px 6%;
-            background: white;
+            background: var(--sc-surface);
             border-bottom: 1px solid #dce9df;
         }
-        a { color: #146b3d; }
+        a { color: var(--sc-accent); }
         .logo {
             font-size: 22px;
             font-weight: bold;
@@ -209,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .card {
             margin-top: 24px;
             padding: 28px;
-            background: white;
+            background: var(--sc-surface);
             border: 1px solid #dce9df;
             border-radius: 18px;
         }
@@ -224,20 +224,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             padding: 12px;
             border: 1px solid #b6cabb;
             border-radius: 8px;
-            background: white;
-            color: #173e2c;
+            background: var(--sc-surface);
+            color: var(--sc-text);
             font: inherit;
         }
         textarea { min-height: 130px; resize: vertical; }
         input:focus, select:focus, textarea:focus {
             outline: 3px solid #d1efdc;
-            border-color: #16834a;
+            border-color: var(--sc-accent);
         }
         button {
             width: 100%;
             margin-top: 24px;
             padding: 14px;
-            background: #16834a;
+            background: var(--sc-button);
             color: white;
             border: 0;
             border-radius: 9px;
@@ -245,21 +245,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-weight: bold;
             cursor: pointer;
         }
-        button:hover { background: #106337; }
-        .hint { font-size: 13px; color: #52685b; }
+        button:hover { background: var(--sc-button-hover); }
+        .hint { font-size: 13px; color: var(--sc-muted); }
         .message {
             padding: 15px;
             border-radius: 10px;
             line-height: 1.6;
         }
-        .success { background: #dff3e6; color: #145c33; }
-        .error { background: #fff0f0; color: #952525; }
+        .success { background: var(--sc-success-bg); color: var(--sc-success-text); }
+        .error { background: var(--sc-error-bg); color: var(--sc-error-text); }
         .error ul { margin: 0; padding-left: 20px; }
     </style>
+    <link rel="stylesheet" href="theme.css?v=1">
+    <script src="theme.js?v=1"></script>
 </head>
 <body>
 <header>
     <a class="logo" href="dashboard.php">NSBM StudyCircle</a>
+<button type="button" class="theme-toggle" aria-label="Switch to dark theme" aria-pressed="false" hidden>Dark mode</button>
 </header>
 
 <main>

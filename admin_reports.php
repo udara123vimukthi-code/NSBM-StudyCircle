@@ -161,15 +161,15 @@ $generatedAt = new DateTimeImmutable(
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: #eff8f2;
-            color: #173e2c;
+            background: var(--sc-bg);
+            color: var(--sc-text);
         }
         header {
             padding: 20px 6%;
-            background: white;
+            background: var(--sc-surface);
             border-bottom: 1px solid #dce9df;
         }
-        a { color: #146b3d; }
+        a { color: var(--sc-accent); }
         .logo {
             font-size: 22px;
             font-weight: bold;
@@ -181,7 +181,7 @@ $generatedAt = new DateTimeImmutable(
             padding: 32px 20px;
         }
         p { line-height: 1.6; }
-        .muted { color: #52685b; }
+        .muted { color: var(--sc-muted); }
         .heading {
             display: flex;
             align-items: center;
@@ -191,14 +191,14 @@ $generatedAt = new DateTimeImmutable(
         }
         button {
             padding: 12px 18px;
-            background: #16834a;
+            background: var(--sc-button);
             color: white;
             border: 0;
             border-radius: 8px;
             font: inherit;
             cursor: pointer;
         }
-        button:hover { background: #106337; }
+        button:hover { background: var(--sc-button-hover); }
         .stats {
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -207,7 +207,7 @@ $generatedAt = new DateTimeImmutable(
         }
         .stat, .card {
             padding: 24px;
-            background: white;
+            background: var(--sc-surface);
             border: 1px solid #dce9df;
             border-radius: 16px;
         }
@@ -216,7 +216,7 @@ $generatedAt = new DateTimeImmutable(
             margin: 10px 0;
             font-size: 36px;
             font-weight: bold;
-            color: #16834a;
+            color: var(--sc-accent);
         }
         .card { margin-top: 24px; }
         .table-wrap { overflow-x: auto; }
@@ -227,7 +227,7 @@ $generatedAt = new DateTimeImmutable(
             text-align: left;
             vertical-align: top;
         }
-        th { background: #f0f8f3; }
+        th { background: var(--sc-soft); }
         td { overflow-wrap: anywhere; }
         .two-columns {
             display: grid;
@@ -243,7 +243,7 @@ $generatedAt = new DateTimeImmutable(
         }
         @media print {
             @page { size: A4 landscape; margin: 12mm; }
-            body { background: white; color: black; font-size: 10pt; }
+            body { background: var(--sc-surface); color: black; font-size: 10pt; }
             .no-print, header { display: none; }
             main { max-width: none; padding: 0; }
             .stats { grid-template-columns: repeat(4, 1fr); }
@@ -259,10 +259,13 @@ $generatedAt = new DateTimeImmutable(
             .number { font-size: 26pt; }
         }
     </style>
+    <link rel="stylesheet" href="theme.css?v=1">
+    <script src="theme.js?v=1"></script>
 </head>
 <body>
 <header>
     <a class="logo" href="admin_dashboard.php">StudyCircle Admin</a>
+<button type="button" class="theme-toggle" aria-label="Switch to dark theme" aria-pressed="false" hidden>Dark mode</button>
 </header>
 
 <main>

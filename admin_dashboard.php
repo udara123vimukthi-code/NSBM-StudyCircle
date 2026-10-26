@@ -64,6 +64,8 @@ $links = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | NSBM StudyCircle</title>
     <link rel="stylesheet" href="site.css">
+    <link rel="stylesheet" href="theme.css?v=1">
+    <script src="theme.js?v=1"></script>
 </head>
 <body>
 <header class="site-header">
@@ -77,6 +79,7 @@ $links = [
         </a>
 
         <nav aria-label="Admin navigation">
+            <button type="button" class="theme-toggle" aria-label="Switch to dark theme" aria-pressed="false" hidden>Dark mode</button>
             <a href="index.php">Home</a>
             <a href="admin_reports.php">Reports</a>
 
@@ -96,6 +99,7 @@ $links = [
         <p class="eyebrow">NSBM Green University · Administration</p>
         <h1>Hello, <?= escape($user['full_name']) ?>!</h1>
         <p>Keep the community organised and help useful resources reach students.</p>
+    <div class="actions dashboard-actions"><a class="button button-outline" href="admin_materials.php">Review submissions &rarr;</a><a class="button button-outline" href="admin_reports.php">View reports &rarr;</a></div>
     </section>
 
     <section class="stats" aria-label="Community overview">

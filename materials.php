@@ -110,13 +110,13 @@ $materials = $stmt->fetchAll();
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: #eff8f2;
-            color: #173e2c;
+            background: var(--sc-bg);
+            color: var(--sc-text);
         }
 
         header {
             padding: 20px 6%;
-            background: white;
+            background: var(--sc-surface);
             border-bottom: 1px solid #dce9df;
             display: flex;
             align-items: center;
@@ -125,7 +125,7 @@ $materials = $stmt->fetchAll();
             gap: 16px;
         }
 
-        a { color: #146b3d; }
+        a { color: var(--sc-accent); }
 
         .logo {
             font-size: 22px;
@@ -141,7 +141,7 @@ $materials = $stmt->fetchAll();
 
         .hero {
             padding: 32px;
-            background: #146b3d;
+            background: var(--sc-accent);
             color: white;
             border-radius: 20px;
         }
@@ -153,7 +153,7 @@ $materials = $stmt->fetchAll();
         .filters {
             margin-top: 24px;
             padding: 24px;
-            background: white;
+            background: var(--sc-surface);
             border: 1px solid #dce9df;
             border-radius: 16px;
         }
@@ -175,8 +175,8 @@ $materials = $stmt->fetchAll();
         input, select {
             width: 100%;
             padding: 12px;
-            background: white;
-            color: #173e2c;
+            background: var(--sc-surface);
+            color: var(--sc-text);
             border: 1px solid #b6cabb;
             border-radius: 8px;
             font: inherit;
@@ -184,7 +184,7 @@ $materials = $stmt->fetchAll();
 
         input:focus, select:focus {
             outline: 3px solid #d1efdc;
-            border-color: #16834a;
+            border-color: var(--sc-accent);
         }
 
         .actions {
@@ -199,7 +199,7 @@ $materials = $stmt->fetchAll();
             padding: 12px 18px;
             border: 0;
             border-radius: 8px;
-            background: #16834a;
+            background: var(--sc-button);
             color: white;
             font: inherit;
             font-weight: bold;
@@ -208,7 +208,7 @@ $materials = $stmt->fetchAll();
         }
 
         button:hover, .download:hover {
-            background: #106337;
+            background: var(--sc-button-hover);
         }
 
         .results {
@@ -219,7 +219,7 @@ $materials = $stmt->fetchAll();
 
         .card {
             padding: 24px;
-            background: white;
+            background: var(--sc-surface);
             border: 1px solid #dce9df;
             border-radius: 16px;
             display: flex;
@@ -234,14 +234,14 @@ $materials = $stmt->fetchAll();
         .badge {
             padding: 6px 10px;
             border-radius: 20px;
-            background: #e7f7ec;
-            color: #146b3d;
+            background: var(--sc-soft);
+            color: var(--sc-accent);
             font-size: 12px;
             font-weight: bold;
         }
 
         .details {
-            color: #52685b;
+            color: var(--sc-muted);
             font-size: 14px;
         }
 
@@ -251,7 +251,7 @@ $materials = $stmt->fetchAll();
         }
 
         summary {
-            color: #146b3d;
+            color: var(--sc-accent);
             cursor: pointer;
         }
 
@@ -262,7 +262,7 @@ $materials = $stmt->fetchAll();
 
         .empty {
             padding: 32px;
-            background: white;
+            background: var(--sc-surface);
             border-radius: 16px;
             text-align: center;
         }
@@ -274,6 +274,8 @@ $materials = $stmt->fetchAll();
             .hero { padding: 24px; }
         }
     </style>
+    <link rel="stylesheet" href="theme.css?v=1">
+    <script src="theme.js?v=1"></script>
 </head>
 <body>
 <header>
@@ -281,6 +283,7 @@ $materials = $stmt->fetchAll();
         NSBM StudyCircle
     </a>
     <a href="<?= escape($dashboard) ?>">Back to dashboard</a>
+<button type="button" class="theme-toggle" aria-label="Switch to dark theme" aria-pressed="false" hidden>Dark mode</button>
 </header>
 
 <main>

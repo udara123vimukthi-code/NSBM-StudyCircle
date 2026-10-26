@@ -70,20 +70,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             place-items: center;
             padding: 24px;
             font-family: Arial, sans-serif;
-            background: #eff8f2;
-            color: #173e2c;
+            background: var(--sc-bg);
+            color: var(--sc-text);
         }
         main {
             width: 100%;
             max-width: 460px;
             padding: 36px;
-            background: white;
-            border-top: 6px solid #16834a;
+            background: var(--sc-surface);
+            border-top: 6px solid var(--sc-button);
             border-radius: 20px;
             box-shadow: 0 16px 48px #153d2a12;
         }
         .brand {
-            color: #16834a;
+            color: var(--sc-accent);
             font-size: 12px;
             font-weight: bold;
             letter-spacing: 2px;
@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         input:focus {
             outline: 3px solid #d1efdc;
-            border-color: #16834a;
+            border-color: var(--sc-accent);
         }
         button {
             width: 100%;
@@ -112,25 +112,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-top: 24px;
             border: 0;
             border-radius: 9px;
-            background: #16834a;
+            background: var(--sc-button);
             color: white;
             font: inherit;
             font-weight: bold;
             cursor: pointer;
         }
-        button:hover { background: #106337; }
-        a { color: #146b3d; }
+        button:hover { background: var(--sc-button-hover); }
+        a { color: var(--sc-accent); }
         .links { text-align: center; }
         .error {
-            background: #fff0f0;
-            color: #952525;
+            background: var(--sc-error-bg);
+            color: var(--sc-error-text);
             padding: 14px;
             border-radius: 9px;
         }
     </style>
+    <link rel="stylesheet" href="theme.css?v=1">
+    <script src="theme.js?v=1"></script>
 </head>
 <body>
 <main>
+    <div class="theme-toolbar"><button type="button" class="theme-toggle" aria-label="Switch to dark theme" aria-pressed="false" hidden>Dark mode</button></div>
     <p class="brand">NSBM GREEN UNIVERSITY</p>
     <h1>Welcome back</h1>
     <p>Sign in to your StudyCircle account.</p>
